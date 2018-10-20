@@ -1,5 +1,14 @@
+
+
 public class Reg_pool_ball extends PoolBalls {
-	
+
+	private Reg_pool_ball [] smallBalls = new Reg_pool_ball[5];
+	public Reg_pool_ball() {
+		smallBalls[0] = new Reg_pool_ball();
+		smallBalls[0].setMass(1);
+		smallBalls[1] = new Reg_pool_ball();
+		smallBalls[0].setMass(1);
+	}
 
 	protected void setMass(double mass) {
 		this.mass = mass; 

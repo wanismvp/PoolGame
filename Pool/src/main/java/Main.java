@@ -4,6 +4,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.KeyFrame;
@@ -21,20 +22,43 @@ public class Main extends Application {
   public static void main(String[] args) { launch(args); }
 
 
+	private boolean isBallBroken(Point2D positionA, Point2D velocityA, double massA, Point2D positionB, Point2D velocityB,  double ballStrength) {
+		Point2D collisionVector = positionA.subtract(positionB);
+		collisionVector = collisionVector.normalize();
+
+
+		double vA = collisionVector.dotProduct(velocityA);
+		double vB = collisionVector.dotProduct(velocityB);
+
+
+		if (vB <= 0 && vA >= 0) {
+			return false;
+		}
+
+		Point2D deltaV = velocityA.subtract(velocityB);
+		double energyOfCollision = massA*deltaV.dotProduct(deltaV);
+		if (ballStrength < energyOfCollision) {
+			return true;
+		}
+		return false;
+	}
+
   public Pair<Point2D, Point2D> calculateCollision(Point2D positionA, Point2D velocityA, double massA, Point2D positionB, Point2D velocityB, double massB) {
 
 
-      Point2D collisionVector = positionA.subtract(positionB);
-      collisionVector = collisionVector.normalize();
+	  Point2D collisionVector = positionA.subtract(positionB);
+	  collisionVector = collisionVector.normalize();
 
 
-      double vA = collisionVector.dotProduct(velocityA);
-      double vB = collisionVector.dotProduct(velocityB);
+	  double vA = collisionVector.dotProduct(velocityA);
+	  double vB = collisionVector.dotProduct(velocityB);
 
 
-      if (vB <= 0 && vA >= 0) {
-          return new Pair<>(velocityA, velocityB);
-      }
+	  if (vB <= 0 && vA >= 0) {
+		  return new Pair<>(velocityA, velocityB);
+	  }
+
+
 
 
       double optimizedP = (2.0 * (vA - vB)) / (massA + massB);
@@ -54,7 +78,11 @@ public class Main extends Application {
 		      }
 	    }
   }
-  public void checkBallCollisions(PoolBalls traverse_block, PoolBalls static_bloc, Bounds table_bounds) {
+
+
+
+
+		public void checkBallCollisions(PoolBalls traverse_block, PoolBalls static_bloc, Bounds table_bounds) {
 
 
 
@@ -73,7 +101,12 @@ public class Main extends Application {
 
 		 	   Point2D posB = new Point2D(static_bloc.getCenterX(),static_bloc.getCenterY());
 		 	   Point2D velB = new Point2D(static_bloc.getVelocityX(), static_bloc.getVelocityY());
-		 	   double massB = static_bloc.getMass();;
+		 	   double massB = static_bloc.getMass();
+
+		 	   if (isBallBroken( posA,  velA,  massA,  posB, velB,  ballStrength)) {
+
+
+			   }
 
 		 	   Pair<Point2D, Point2D> results = calculateCollision(posA, velA, massA, posB, velB, massB);
 
@@ -164,7 +197,7 @@ public class Main extends Application {
 		 }
   }
   // cue stick physics function
-  public void setDragListeners(final PoolBalls block, final Pane root) {
+  public void setDragListeners(final PoolBalls block, final Pane root, final Sticker sticker) {
 	    final Delta dragDelta = new Delta();
 
 	    block.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -192,13 +225,19 @@ public class Main extends Application {
 	    });
 	    block.setOnMouseDragged(new EventHandler<MouseEvent>() {
 	      @Override public void handle(MouseEvent mouseEvent) {
+	      	double oldX = block.getCenterX();
+			  double oldY = block.getCenterY();
+			  double newX = mouseEvent.getSceneX();
+			  double newY = mouseEvent.getSceneY();
 
-	    	  block.setChange(mouseEvent.getSceneX() , mouseEvent.getSceneY()  );
+	    	  block.setChange(newX , newY);
 	    	  if (block instanceof Cue_pool_ball) {
-	    	  		Sticker sticker = new Sticker(mouseEvent.getSceneX(), mouseEvent.getSceneY());
-				  root.getChildren().add(sticker);
+	    	  		 sticker.setX(newX);
+	    	  		 sticker.setY(newY);
+				  Rotate rotate = new Rotate(Math.atan((newY - oldY) / (newX - oldX)), oldX, oldY);
+				  sticker.getTransforms().addAll(rotate);
 			  }
-			  
+
 	      }
 	    });
 	  }
@@ -213,11 +252,11 @@ public class Main extends Application {
 	  AbstractFactoryConfiguration PocketFactory = FactoryProducer.getFactory("pocket");
 
 
+
 	  final Pool_table new_table = TableFactory.getPoolTable(filepath);
 	  final BallCollection balls =  BallFactory.getPoolBalls(filepath);
 	  final  PocketCollection pockets = PocketFactory.getPoolPockets(filepath);
-
-
+	  final Sticker sticker = new Sticker(0, 0);
 
 	  final double table_friction = new_table.getFriction();
 	  primaryStage.setTitle("Press white circles and release to execute virtual cue stick");
@@ -227,11 +266,13 @@ public class Main extends Application {
 	  root.getChildren().add(new_table);
 	  root.getChildren().addAll(balls.getBalls());
 	  root.getChildren().addAll(pockets.getPockets());
+	  root.getChildren().add(sticker);
+
 
 
 
 	  for (PoolBalls block : balls.getBalls()) {
-		  setDragListeners(block, root);
+		  setDragListeners(block, root, sticker);
       }
     //The Time line watches for the event when the ball hits a wall
 	 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),
