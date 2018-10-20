@@ -8,7 +8,9 @@ public class FactoryProducer {
 	         
 	      }else if(choice.equalsIgnoreCase("BALL")){
 	         return new BallFactory();
-	      }
+	      } else if (choice.equalsIgnoreCase("POCKET")) {
+	      	return new PocketFactory();
+		  }
 	      
 	      return null;
 	   }

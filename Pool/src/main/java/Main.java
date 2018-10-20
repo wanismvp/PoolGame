@@ -164,7 +164,7 @@ public class Main extends Application {
 		 }
   }
   // cue stick physics function
-  public void setDragListeners(final PoolBalls block, Pane root) {
+  public void setDragListeners(final PoolBalls block, final Pane root) {
 	    final Delta dragDelta = new Delta();
 
 	    block.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -194,6 +194,11 @@ public class Main extends Application {
 	      @Override public void handle(MouseEvent mouseEvent) {
 
 	    	  block.setChange(mouseEvent.getSceneX() , mouseEvent.getSceneY()  );
+	    	  if (block instanceof Cue_pool_ball) {
+	    	  		Sticker sticker = new Sticker(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+				  root.getChildren().add(sticker);
+			  }
+			  
 	      }
 	    });
 	  }
@@ -201,21 +206,29 @@ public class Main extends Application {
 
   @Override public void start(Stage primaryStage) {
 
-	  String filepath = "C:\\Users\\qianwan\\Documents\\Repo\\Fin-PTPM-PLR-MNextG-NG\\Pool\\src\\main\\config\\config.json";
+	  String filepath = "config\\config.json";
 	  //string could be changed to enum
 	  AbstractFactoryConfiguration TableFactory = FactoryProducer.getFactory("table");
 	  AbstractFactoryConfiguration BallFactory = FactoryProducer.getFactory("ball");
+	  AbstractFactoryConfiguration PocketFactory = FactoryProducer.getFactory("pocket");
+
 
 	  final Pool_table new_table = TableFactory.getPoolTable(filepath);
 	  final BallCollection balls =  BallFactory.getPoolBalls(filepath);
+	  final  PocketCollection pockets = PocketFactory.getPoolPockets(filepath);
+
+
+
 	  final double table_friction = new_table.getFriction();
 	  primaryStage.setTitle("Press white circles and release to execute virtual cue stick");
 	  final Pane root = new Pane();
 	  Scene scene = new Scene(root, new_table.getWidth(), new_table.getHeight());
 
-
 	  root.getChildren().add(new_table);
 	  root.getChildren().addAll(balls.getBalls());
+	  root.getChildren().addAll(pockets.getPockets());
+
+
 
 	  for (PoolBalls block : balls.getBalls()) {
 		  setDragListeners(block, root);

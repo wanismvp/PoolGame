@@ -1,11 +1,11 @@
 {
   "Table": {
-    "image" : "",
+    "image" : "src/main/resources/table.jpg",
     "colour": "green",
     "friction": 0.1,
     "size": {
-      "x": 600,
-      "y": 300
+      "x": 800,
+      "y": 600
     }
   },
   "Balls": {
@@ -13,8 +13,8 @@
       {
         "colour": "white",
         "position": {
-          "x": 20.0,
-          "y": 50.0
+          "x": 100.0,
+          "y": 290.0
         },
         "velocity": {
           "x": 1.0,
@@ -60,5 +60,50 @@
       }
     ]
   },
-  "Pockets" : {}
+"Pockets" : {
+  "pocket": [
+    {
+      "position": {
+        "x": 20.0,
+        "y": 20.0
+      },
+      "radius": 20.0
+    },
+    {
+      "position": {
+        "x": 780.0,
+        "y": 20.0
+      },
+      "radius": 20.0
+    },
+    {
+      "position": {
+        "x": 20.0,
+        "y": 580.0
+      },
+      "radius": 20.0
+    },
+    {
+      "position": {
+        "x": 780.0,
+        "y": 580.0
+      },
+      "radius": 20.0
+    },
+    {
+      "position": {
+        "x": 390.0,
+        "y": 20.0
+      },
+      "radius": 20.0
+    },
+    {
+      "position": {
+        "x": 390.0,
+        "y": 580.0
+      },
+      "radius": 20.0
+    }
+  ]
+}
 }

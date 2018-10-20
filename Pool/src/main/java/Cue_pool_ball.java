@@ -1,5 +1,5 @@
 public class Cue_pool_ball extends PoolBalls {
-	 
+
 	protected void setMass(double mass) {
 		this.mass = mass; 
 	}
@@ -7,7 +7,7 @@ public class Cue_pool_ball extends PoolBalls {
 		return mass; 
 	}
 	Cue_pool_ball(int x, int y, int r){
-		super(x, y ,r); 
+		super(x, y ,r);
 	}
 	
 	protected void setVelocity(double Velx, double Vely) {
@@ -33,11 +33,11 @@ public class Cue_pool_ball extends PoolBalls {
 	}
 	protected void setChange(double changeX, double changeY) {
 		this.changeX = changeX; 
-		this.changeY = changeY; 
+		this.changeY = changeY;
 	}
 	
 	protected double getChangeX() {
-		return changeX; 
+		return changeX;
 	}
 	protected double getChangeY() {
 		return changeY; 

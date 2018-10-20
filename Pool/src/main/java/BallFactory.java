@@ -51,10 +51,11 @@ public class BallFactory implements AbstractFactoryConfiguration{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public PocketCollection getPoolPockets(String filepath) {
+		return null;
+	}
+
 
 }
