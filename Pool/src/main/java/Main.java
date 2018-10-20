@@ -103,7 +103,10 @@ public class Main extends Application {
 		 	   Point2D velB = new Point2D(static_bloc.getVelocityX(), static_bloc.getVelocityY());
 		 	   double massB = static_bloc.getMass();
 
-		 	   if (isBallBroken( posA,  velA,  massA,  posB, velB,  ballStrength)) {
+		 	   if (static_bloc instanceof Reg_pool_ball && isBallBroken( posA,  velA,  massA,  posB, velB,  ballStrength)) {
+		 	   		Reg_pool_ball bigBall = (Reg_pool_ball) static_bloc;
+		 	   		
+
 
 
 			   }
