@@ -14,6 +14,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
+import java.util.Arrays;
+
 public class Main extends Application {
 
 
@@ -69,11 +71,11 @@ public class Main extends Application {
 
       return new Pair<>(velAPrime, velBPrime);
   }
-  public void setAfterCollision(BallCollection balls, Bounds table_bounds) {
+  public void setAfterCollision(BallCollection balls, Bounds table_bounds, Pane root) {
 	  for(PoolBalls traverse_block : balls.getBalls()){
 	    	 for (PoolBalls static_bloc : balls.getBalls()) {
 		      if (traverse_block != static_bloc) {
-		    	  checkBallCollisions( traverse_block,  static_bloc, table_bounds);
+		    	  checkBallCollisions( traverse_block,  static_bloc, table_bounds, root, balls);
 		        }
 		      }
 	    }
@@ -82,7 +84,7 @@ public class Main extends Application {
 
 
 
-		public void checkBallCollisions(PoolBalls traverse_block, PoolBalls static_bloc, Bounds table_bounds) {
+		public void checkBallCollisions(PoolBalls traverse_block, PoolBalls static_bloc, Bounds table_bounds, Pane root, BallCollection balls) {
 
 
 
@@ -103,12 +105,11 @@ public class Main extends Application {
 		 	   Point2D velB = new Point2D(static_bloc.getVelocityX(), static_bloc.getVelocityY());
 		 	   double massB = static_bloc.getMass();
 
-		 	   if (static_bloc instanceof Reg_pool_ball && isBallBroken( posA,  velA,  massA,  posB, velB,  ballStrength)) {
+		 	   if (static_bloc instanceof Reg_pool_ball && isBallBroken( posA,  velA,  massA,  posB, velB,  Integer.MAX_VALUE)) {
 		 	   		Reg_pool_ball bigBall = (Reg_pool_ball) static_bloc;
-		 	   		
-
-
-
+		 	   		balls.getBalls().remove(static_bloc);
+				   balls.getBalls().addAll(Arrays.asList(bigBall.getSmallBalls()));
+		 	   		root.getChildren().addAll(Arrays.asList(bigBall.getSmallBalls()));
 			   }
 
 		 	   Pair<Point2D, Point2D> results = calculateCollision(posA, velA, massA, posB, velB, massB);
@@ -288,11 +289,11 @@ public class Main extends Application {
         	 for(PoolBalls traverse_block : balls.getBalls()){
 
         		 moveBall(traverse_block, table_bounds);
-        		 setAfterCollision(balls, table_bounds); // trying to make sure that collision is registered even at high speeds
+        		 setAfterCollision(balls, table_bounds, root); // trying to make sure that collision is registered even at high speeds
         		 calculateFriction(traverse_block, table_friction);
         		 checkWallCollsions(traverse_block, table_bounds);
     	     }
-        	 setAfterCollision(balls, table_bounds);
+        	 setAfterCollision(balls, table_bounds, root);
 	}
      }));
 	 timeline.setCycleCount(Timeline.INDEFINITE);

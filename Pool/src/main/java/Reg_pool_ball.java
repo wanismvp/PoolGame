@@ -2,16 +2,9 @@ import javafx.scene.paint.Color;
 
 public class Reg_pool_ball extends PoolBalls {
 
-	private Reg_pool_ball [] smallBalls = new Reg_pool_ball[5];
+	private Reg_pool_ball [] smallBalls = new Reg_pool_ball[2];
 	public Reg_pool_ball() {
-		smallBalls[0] = new Reg_pool_ball();
-		smallBalls[0].setMass(2);
-		smallBalls[0].setFill(Color.web("red"));
-		smallBalls[0].setRadius(3.0);
-		smallBalls[1] = new Reg_pool_ball();
-		smallBalls[1].setMass(1);
-		smallBalls[1].setFill(Color.web("orange"));
-		smallBalls[1].setRadius(1.0);
+
 	}
 
 	protected void setMass(double mass) {
@@ -66,7 +59,17 @@ public class Reg_pool_ball extends PoolBalls {
 	}
 
 	public Reg_pool_ball[] getSmallBalls() {
+
+		smallBalls[0] = new Reg_pool_ball();
+		smallBalls[0].setMass(2);
+		smallBalls[0].setFill(Color.web("red"));
+		smallBalls[0].setRadius(3.0);
+		smallBalls[1] = new Reg_pool_ball();
+		smallBalls[1].setMass(1);
+		smallBalls[1].setFill(Color.web("orange"));
+		smallBalls[1].setRadius(1.0);
 		for (Reg_pool_ball ball : smallBalls) {
+
 			ball.setVelocityX(this.getVelocityX() / 2);
 			ball.setVelocityY(this.getVelocityY() / 2);
 			ball.setCenterX(this.getCenterX());
